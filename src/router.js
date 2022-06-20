@@ -7,6 +7,8 @@ const Profile = () => import("./components/Profile.vue")
 const BoardAdmin = () => import("./components/BoardAdmin.vue")
 const BoardModerator = () => import("./components/BoardModerator.vue")
 const BoardUser = () => import("./components/BoardUser.vue")
+const Recipe = () => import("./components/Recipe.vue")
+
 const routes = [
   {
     path: "/",
@@ -48,6 +50,11 @@ const routes = [
     name: "user",
     // lazy-loaded
     component: BoardUser,
+  },
+  {
+    path: "/recipes/:id",
+    name: "recipe-details",
+    component: Recipe,
   },
 ];
 const router = createRouter({
