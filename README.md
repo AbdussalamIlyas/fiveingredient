@@ -1,4 +1,5 @@
 # fiveingredient
+[![CI](https://github.com/AbdussalamIlyas/fiveingredient/actions/workflows/ci.yml/badge.svg)](https://github.com/AbdussalamIlyas/fiveingredient/actions/workflows/ci.yml)
 
 ## Project setup
 ```
