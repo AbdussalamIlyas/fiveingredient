@@ -56,7 +56,7 @@
           </ul>
         </div>
       </div>
-      <router-link :to="'/recipes/' + currentRecipe.id" class="badge badge-warning" style="width: 250px;">View Recipe</router-link>
+      <router-link :to="'/recipes/' + currentRecipe.id" class="badge badge-warning" style="margin-left: 16px">View Recipe</router-link>
     </div>
     <div v-else>
       <br />

@@ -7,7 +7,7 @@ const Profile = () => import("./components/Profile.vue")
 const BoardAdmin = () => import("./components/BoardAdmin.vue")
 const BoardModerator = () => import("./components/BoardModerator.vue")
 const BoardUser = () => import("./components/BoardUser.vue")
-const Recipe = () => import("./components/Recipe.vue")
+const Recipe = () => import("./views/Recipe.vue")
 
 const routes = [
   {
@@ -63,8 +63,12 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const publicPages = ['/login', '/register', '/home'];
-  const authRequired = !publicPages.includes(to.path);
+  const publicPages = ['/login', '/register', '/home', '/recipes'];
+  let toPath = to.path;
+    if(to.path.split('/').length - 1 > 1) {
+    toPath = to.path.substr(0, to.path.lastIndexOf("/"));
+  }
+  const authRequired = !publicPages.includes(toPath);
   const loggedIn = localStorage.getItem('user');
   // trying to access a restricted page + not logged in
   // redirect to login page

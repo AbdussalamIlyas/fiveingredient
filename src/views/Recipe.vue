@@ -1,10 +1,14 @@
 <template>
-  <div class="row align-items-center" style="margin-top: 100px">
+  <div class="text-center p-4 p-lg-5">
+    <p class="font-weight-bold text-primary mb-2">Recipe Details</p>
+    <h1 class="font-weight-bold mb-4">{{currentRecipe.name}}</h1>
+  </div>
+  <div class="row align-items-start" style="margin-top: 20px;">
     <div class="col">
       <div>
-        <img src="https://www.forkinthekitchen.com/wp-content/uploads/2018/01/210729.salmon.lemon_.garlic.pasta-1456-7.jpg"
-             alt="example"
-             style="max-width:350px; max-height:500px;"/>
+        <img class="rounded img-fluid"
+          src="https://www.forkinthekitchen.com/wp-content/uploads/2018/01/210729.salmon.lemon_.garlic.pasta-1456-7.jpg"
+          alt="example"/>
       </div>
     </div>
     <div class="col">
@@ -19,7 +23,13 @@
       </div>
     </div>
     <div class="col">
-      How to cook
+      <strong>How to cook :</strong>
+      <p>
+        1. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab doloribus, error fugiat minima officia temporibus.<br>
+        2. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores maxime praesentium qui quo soluta unde!<br>
+        3. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab atque dicta doloremque facere harum optio sequi sunt! Commodi, consectetur, eos!<br>
+        4. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Id, ipsa.<br>
+      </p>
     </div>
   </div>
 
@@ -32,7 +42,7 @@ export default {
   name: 'Recipe',
   data() {
     return {
-      currentRecipe: null,
+      currentRecipe: [name],
       message: ''
     };
   },
