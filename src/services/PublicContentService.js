@@ -1,21 +1,21 @@
 import axios from 'axios';
-const API_URL = 'http://localhost:8080/api/public';
+
 class PublicContentService {
 
   getAll() {
-    return axios.get(API_URL + "/recipes");
+    return axios.get("/public/recipes");
   }
 
   searchRecipeByIngredient(name) {
-    return axios.get(API_URL + `/recipes?name=${name}`);
+    return axios.get(`/public/recipes?name=${name}`);
   }
 
   getAllIngredientsOfRecipe(id) {
-    return axios.get(API_URL + `/recipes/${id}/ingredients`);
+    return axios.get(`/public/recipes/${id}/ingredients`);
   }
 
   getRecipeById(id) {
-    return axios.get(API_URL + `/recipes/${id}`);
+    return axios.get(`/public/recipes/${id}`);
   }
 }
 export default new PublicContentService();
