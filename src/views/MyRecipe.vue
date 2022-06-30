@@ -4,10 +4,9 @@
       <div class="col-lg-6 col-md-8 mx-auto">
         <h1 class="fw-light">My Recipe</h1>
         <p class="lead text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. A commodi distinctio dolores et excepturi expedita, facilis illo ipsum iure magni mollitia nesciunt omnis quas quos rerum soluta suscipit tenetur vitae.</p>
-        <img :src="dataUrl">
 
         <p>
-          <router-link to="/mod" class="btn btn-primary my-2">Create Recipe</router-link>
+          <router-link v-if="showModeratorBoard" to="/mod" class="btn btn-primary my-2">Create Recipe</router-link>
         </p>
       </div>
     </div>
@@ -26,7 +25,7 @@
               <p class="card-text">{{ recipe.description }}</p>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                  <router-link :to="'/recipes/' + recipe.id" type="button" class="btn btn-sm btn-outline-secondary">View</router-link>
                   <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
                 </div>
                 <small class="text-muted">9 mins</small>
@@ -54,6 +53,12 @@ export default {
     currentUser() {
       return this.$store.state.auth.user;
     },
+    showModeratorBoard() {
+      if (this.currentUser && this.currentUser['roles']) {
+        return this.currentUser['roles'].includes('ROLE_MODERATOR');
+      }
+      return false;
+    }
   },
   mounted() {
     MyRecipeService.getAllRecipeOfAUser(this.currentUser.id).then(

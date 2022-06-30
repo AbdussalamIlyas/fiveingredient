@@ -9,9 +9,9 @@
           </router-link>
         </li>
         <li v-if="showAdminBoard" class="nav-item">
-          <router-link to="/admin" class="nav-link">Admin Board</router-link>
+          <router-link to="/admin" class="nav-link">Verified User</router-link>
         </li>
-        <li v-if="showModeratorBoard" class="nav-item">
+        <li v-if="showModeratorBoard || showAdminBoard" class="nav-item">
           <router-link to="/mod" class="nav-link">Create Recipe</router-link>
         </li>
         <li class="nav-item">
