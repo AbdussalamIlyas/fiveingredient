@@ -25,10 +25,7 @@
     <div class="col">
       <strong>How to cook :</strong>
       <p>
-        1. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab doloribus, error fugiat minima officia temporibus.<br>
-        2. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores maxime praesentium qui quo soluta unde!<br>
-        3. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab atque dicta doloremque facere harum optio sequi sunt! Commodi, consectetur, eos!<br>
-        4. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Id, ipsa.<br>
+        {{currentRecipe.direction}}
       </p>
     </div>
   </div>
