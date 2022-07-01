@@ -20,59 +20,80 @@
       </div>
     </div>
     <div class="row">
+      <!-- Left Column : Form -->
       <div class="col-7">
-        <form class="border p-3">
-          <div class="mb-3">
-            <label for="exampleFormControlInput1" class="form-label">Recipe Name</label>
-            <input type="email" class="form-control" id="exampleFormControlInput1">
+        <div class="submit-form">
+          <div>
+            <form class="border p-3">
+              <div class="mb-3">
+                <label for="name" class="form-label">Recipe Name</label>
+                <input type="text" class="form-control" id="name" required v-model="recipe.name" name="name">
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Description</label>
+                <textarea class="form-control" id="description" v-model="recipe.description"
+                          name="description" rows="3"></textarea>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Direction</label>
+                <textarea class="form-control" id="direction" v-model="recipe.direction"
+                          name="direction" rows="10"></textarea>
+              </div>
+            </form>
           </div>
-          <div class="mb-3">
-            <label for="exampleFormControlTextarea1" class="form-label">Description</label>
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-          </div>
-          <div class="mb-3">
-            <label for="exampleFormControlTextarea1" class="form-label">Direction</label>
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="8"></textarea>
-          </div>
-        </form>
-      </div>
-      <div class="col border p-3">
-        <label for="formFile" class="form-label">Upload Image</label>
-        <img src="https://images.unsplash.com/photo-1518779578993-ec3579fee39f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80"
-             class="img-fluid rounded" style="object-fit:cover; width: 600px; height: 350px;" alt="...">
-
-        <div class="mt-2">
-          <input class="form-control" type="file" id="formFile">
         </div>
+      </div>
+
+      <!-- Right Column : Upload Image -->
+      <div class="col border p-3">
+        <label class="form-label">Upload Image</label>
+
+
+        <div v-if="previewImage">
+          <div>
+            <img class="img-fluid rounded" :src="previewImage" alt=""
+                 style="object-fit:cover; width: 600px; height: 350px;"/>
+          </div>
+        </div>
+        <div v-if="currentImage" class="progress">
+          <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="progress" aria-valuemin="0"
+               aria-valuemax="100" :style="{ width: progress + '%' }"
+          >
+            {{ progress }}%
+          </div>
+        </div>
+
+        <label class="btn btn-secondary mt-2">
+          <input type="file" accept="image/*" ref="file" @change="selectImage"/>
+        </label>
 
       </div>
     </div>
+    <!-- Row : Ingredient -->
     <div class="row p-3">
       <h4 class="mt-3">Ingredient</h4>
       <div class="input-group mb-3">
-        <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+        <input type="text" class="form-control rounded" placeholder="Search" aria-label="Search"
+               aria-describedby="search-addon" v-model="ingredientNameSearchString" />
         <button type="button" class="btn btn-outline-primary">search</button>
       </div>
+      <div v-if="ingredientNameSearchString" class="list-group">
+        <button @click="putSavedIngredient(ingredient)" type="button" class="list-group-item list-group-item-action"
+                v-for="ingredient in filteredIngredients" v-bind:key="ingredient.id">
+          {{ ingredient.name }}
+        </button>
+      </div>
     </div>
+
+    <!-- Row : List of to be save Ingredients -->
     <div class="row border p-3 gx-2">
-      <div class="col">
+      <div class="col" v-for="selectedIngredient in savedIngredients" v-bind:key="selectedIngredient.id">
         <div class="card text-center p-2 mb-3">
-          <span class="badge bg-warning rounded-pill w-40">102 cal</span>
+          <span class="badge bg-warning rounded-pill w-40">{{ selectedIngredient.calories }} cal</span>
           <div class="card-body">
-            <h4 class="card-title">Chicken</h4>
+            <h4 class="card-title">{{ selectedIngredient.name }}</h4>
           </div>
-          <button type="button" class="btn btn-secondary"
-                  style="--bs-btn-padding-y: .10rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
-            remove</button>
-        </div>
-      </div>
-      <div class="col">
-        <div class="card text-center p-2 mb-3">
-          <span class="badge bg-warning rounded-pill w-40">102 cal</span>
-          <div class="card-body">
-            <h4 class="card-title">Chicken</h4>
-          </div>
-          <button type="button" class="btn btn-secondary"
+          <button @click="removeFromSavedIngredient(selectedIngredient)" type="button" class="btn btn-secondary"
                   style="--bs-btn-padding-y: .10rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
             remove</button>
         </div>
@@ -81,8 +102,11 @@
 
     </div>
 
-    <div class="row justify-content-center mt-3">
-      <button class="btn btn-primary" type="submit">Submit</button>
+    <div class="row justify-content-center mt-3" v-if="!submitted">
+      <button @click="uploadAndSaveRecipe" class="btn btn-primary" type="submit">Submit</button>
+    </div>
+    <div class="row justify-content-center mt-3" v-if="submitted">
+      <button @click="refreshPage" class="btn btn-primary" type="submit">New Recipe</button>
     </div>
 
   </div>
@@ -93,13 +117,147 @@
 
 <script>
 
+import UploadFileService from '@/services/UploadFileService'
+import CreateRecipeService from '@/services/CreateRecipeService'
+
 export default {
   name: "CreateRecipe",
   data() {
     return {
-      content: "",
+      //upload image
+      currentImage: undefined,
+      previewImage: undefined,
+      progress: 0,
+      imageInfos: [],
+      uploadedImageId: undefined,
+
+      //input form (name, description, direction)
+      recipe: {
+        name:"",
+        description:"",
+        direction:""
+      },
+
+      //Ingredients
+      ingredients: [],
+      ingredientNameSearchString: "",
+      savedIngredients: [],
+      ingredient: undefined,
+
+      submitted: false
     };
   },
+  methods: {
+    refreshPage() {
+      location.reload()
+    },
+    selectImage() {
+      this.currentImage = this.$refs.file.files.item(0);
+      this.previewImage = URL.createObjectURL(this.currentImage);
+      this.progress = 0;
+    },
+    getAllIngredients() {
+      CreateRecipeService.getAllIngredient()
+        .then(response => {
+          this.ingredients = response.data;
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    },
+    putSavedIngredient(ing) {
+      if(!this.savedIngredients.includes(ing)) {
+        this.savedIngredients.push(ing)
+        this.ingredientNameSearchString = ""
+      }
+      else {
+        console.log("Ingredient already selected!")
+      }
+    },
+    removeFromSavedIngredient(ing) {
+      const index = this.savedIngredients.indexOf(ing)
+
+      //remove if exist
+      if (index > -1) {
+        this.savedIngredients.splice(index, 1);
+      }
+    },
+    uploadAndSaveRecipe() {
+      //Upload Image to Database
+      this.progress = 0;
+      UploadFileService.upload(this.currentImage, (event) => {
+        this.progress = Math.round((100 * event.loaded) / event.total);
+      })
+        .then((response) => {
+          return response.data.message
+        })
+        .then((imageId) => {
+          this.uploadedImageId = imageId
+          let data = {
+            name: this.recipe.name,
+            description: this.recipe.description,
+            direction: this.recipe.direction
+          };
+          CreateRecipeService.createRecipeForUser(this.currentUser.id,data)
+            .then(response => {
+              this.recipe.id = response.data.id;
+              console.log(response.data);
+              return this.recipe.id
+            })
+            .then(recipeId => {
+              //Put Image to Recipe
+              CreateRecipeService.setImageForRecipe(recipeId, this.uploadedImageId)
+
+              //Put Ingredients to Recipe
+              for(const ing of this.savedIngredients) {
+                CreateRecipeService.addIngredientToRecipe(recipeId, ing.id)
+              }
+
+              //submitted
+              this.submitted = true
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        })
+        .catch((error) => {
+          this.progress = 0;
+          console.log("Could not upload the image! " + error);
+          this.currentImage = undefined;
+        });
+
+    },
+  },
+  computed: {
+    currentUser() {
+      return this.$store.state.auth.user;
+    },
+    filteredIngredients: function () {
+
+      let ingredients = this.ingredients;
+      let ingredientNameSearchString = this.ingredientNameSearchString.trim().toLowerCase();
+
+      if(!ingredientNameSearchString){
+        return ingredients;
+      }
+
+      ingredients = ingredients.filter(function(item){
+        if(item.name.toLowerCase().indexOf(ingredientNameSearchString) !== -1){
+          return item;
+        }
+      })
+
+      return ingredients;
+    }
+  },
+  mounted() {
+    UploadFileService.getFiles().then(response => {
+      this.imageInfos= response.data;
+    });
+
+    this.getAllIngredients()
+
+  }
 };
 </script>
 
