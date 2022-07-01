@@ -31,29 +31,20 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-          <th scope="row">1</th>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td>@mdo</td>
-          <td>@mdo</td>
-          <td><button class="btn btn-primary btn-sm" type="submit">Verified</button></td>
-        </tr>
-        <tr>
-          <th scope="row">2</th>
-          <td>10</td>
-          <td>admin@webtech.com</td>
-          <td>admin</td>
-          <td>admin</td>
-          <td><button class="btn btn-primary btn-sm" type="submit">Verified</button></td>
-        </tr>
-        <tr>
-          <th scope="row">3</th>
-          <td>Larry</td>
-          <td>@twitter</td>
-          <td>@mdo</td>
-          <td>@mdo</td>
-          <td><button class="btn btn-primary btn-sm" type="submit">Verified</button></td>
+        <tr v-for="(user,index) in users" :key="index">
+          <th scope="row">{{ index+1 }}</th>
+          <td>{{ user.id }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.username }}</td>
+          <td>
+            <button v-for="role in user.roles" :key="role.id" type="button" class="btn btn-success mr-3">
+              {{ role.name.toLowerCase() }}
+            </button>
+          </td>
+          <td>
+            <button @click="verifiedUser(user)" v-if="!checkVerified(user)" class="btn btn-primary" type="submit">Verified</button>
+            <button @click="unverifiedUser(user)" v-if="checkVerified(user)" class="btn btn-primary" :disabled="checkAdmin(user)" type="submit">Unverified</button>
+          </td>
         </tr>
         </tbody>
       </table>
@@ -63,8 +54,53 @@
 </template>
 
 <script>
+import VerifiedUserService from '@/services/VerifiedUserService'
+
 export default {
-  name: 'VerifiedUser'
+  name: 'VerifiedUser',
+  data() {
+    return {
+      users: [
+        {
+          roles: []
+        }
+      ]
+    }
+  },
+  methods: {
+    checkVerified(user) {
+      //Check if user verified or not
+      for(const role of user.roles) {
+        if(role.id === 2 || role.id === 3) {
+          return true
+        }
+      }
+      return false
+    },
+    checkAdmin(user) {
+      for(const role of user.roles) {
+        if(role.id === 3) {
+          return true
+        }
+      }
+      return false
+    },
+    verifiedUser(user) {
+      VerifiedUserService.verifiedUser(user.id)
+      location.reload()
+    },
+    unverifiedUser(user) {
+      VerifiedUserService.unverifiedUser(user.id)
+      location.reload()
+    }
+
+
+  },
+  mounted() {
+    VerifiedUserService.getAllUsers().then(response => {
+      this.users= response.data;
+    });
+  }
 }
 </script>
 
