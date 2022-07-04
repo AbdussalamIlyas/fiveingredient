@@ -8,6 +8,7 @@ const BoardAdmin = () => import("./components/BoardAdmin.vue")
 const BoardModerator = () => import("./components/BoardModerator.vue")
 const BoardUser = () => import("./components/BoardUser.vue")
 const Recipe = () => import("./views/Recipe.vue")
+const EditRecipe = () => import("./views/EditRecipe.vue")
 
 const routes = [
   {
@@ -56,6 +57,11 @@ const routes = [
     name: "recipe-details",
     component: Recipe,
   },
+  {
+    path: "/recipes/:id/edit",
+    name: "edit-recipe",
+    component: EditRecipe
+  }
 ];
 const router = createRouter({
   history: createWebHistory(),
