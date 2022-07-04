@@ -11,7 +11,7 @@
         <label class="form-label">Upload Image</label>
 
         <div>
-          <img class="img-fluid rounded" :src="oldImage" alt=""
+          <img v-if="!changeImage" class="img-fluid rounded" :src="oldImage" alt=""
                style="object-fit:cover; width: 400px; height: 350px;"/>
         </div>
 

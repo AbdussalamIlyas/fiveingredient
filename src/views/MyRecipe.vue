@@ -19,14 +19,16 @@
         <div class="col-lg-4 d-flex align-items-stretch" v-for="recipe in recipes" :key="recipe.id">
 
           <div class="card shadow-sm">
-            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+
+            <img class="img-fluid rounded" :src="displayImage(recipe.image.data)" alt="" style="object-fit:cover; width: 300px; height: 225px;"/>
+
             <div class="card-body">
               <h4>{{ recipe.name }}</h4>
               <p class="card-text">{{ recipe.description }}</p>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
                   <router-link :to="'/recipes/' + recipe.id" type="button" class="btn btn-sm btn-outline-secondary">View</router-link>
-                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                  <router-link :to="'/recipes/' + recipe.id + '/edit'" type="button" class="btn btn-sm btn-outline-secondary">Edit</router-link>
                 </div>
                 <small class="text-muted">9 mins</small>
               </div>
@@ -48,6 +50,11 @@ export default {
       recipes: [],
       image: undefined
     };
+  },
+  methods: {
+    displayImage(base64String) {
+      return "data:image/jpg;base64," + base64String
+    }
   },
   computed: {
     currentUser() {

@@ -29,38 +29,32 @@
       </div>
     </div>
   </section>
-  <div class="col-md-6" style="width: 500px; float:left;">
-    <h4 class="fw-light"> Recipes List</h4>
-    <ul class="list-group">
-      <li class="list-group-item" :class="{ active: index === currentIndex }"
-          v-for="(recipe, index) in recipes" :key="index"
-          @click="setActiveRecipe(recipe, index)"
-      >
-        {{ recipe.name }}
-      </li>
-    </ul>
-  </div>
-  <div class="col-md-6" style="overflow: hidden;">
-    <div v-if="currentRecipe.name !== ''">
-      <h4><label><strong>{{ currentRecipe.name }}</strong></label></h4>
-      <div>
-        <label><strong>Ingredients :</strong></label>
-      </div>
-      <div class="col-md-7">
-        <div v-if="currentRecipe">
-          <ul class="list-group">
-            <li class="list-group-item" :class="{ active: index === currentIndex }"
-                v-for="(ingredients, index) in currentRecipe.ingredients" :key="index">
-              {{ ingredients.name }}
-            </li>
-          </ul>
+
+  <h4 class="fw-light"> Recipes List</h4>
+  <div class="album py-5 bg-light">
+    <div class="container">
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+
+        <div class="col-lg-4 d-flex align-items-stretch" v-for="recipe in recipes" :key="recipe.id">
+          <div class="card" style="width: 18rem;">
+            <img :src="displayImage(recipe.image.data)" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">{{ recipe.name }}</h5>
+              <p class="card-text">{{ recipe.description }}</p>
+            </div>
+            <ul class="list-group">
+              <li class="list-group-item" v-for="ingredient in recipe.ingredients" :key="ingredient.id">
+                {{ ingredient.name }}
+              </li>
+            </ul>
+
+            <div class="btn-group">
+              <router-link :to="'/recipes/' + recipe.id" type="button" class="btn btn-sm btn-outline-secondary">View</router-link>
+            </div>
+          </div>
         </div>
+
       </div>
-      <router-link :to="'/recipes/' + currentRecipe.id" class="badge badge-warning" style="margin-left: 16px">View Recipe</router-link>
-    </div>
-    <div v-else>
-      <br />
-      <p style="padding: 70px 0;">Click on a Recipe</p>
     </div>
   </div>
 </template>
@@ -120,6 +114,10 @@ export default {
     setActiveRecipe(recipe, index) {
       this.currentRecipe = recipe;
       this.currentIndex = recipe ? index : -1;
+    },
+
+    displayImage(base64String) {
+      return "data:image/jpg;base64," + base64String
     }
 
   },

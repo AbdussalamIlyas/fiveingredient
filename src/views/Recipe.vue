@@ -2,13 +2,13 @@
   <div class="text-center p-4 p-lg-5">
     <p class="font-weight-bold text-primary mb-2">Recipe Details</p>
     <h1 class="font-weight-bold mb-4">{{currentRecipe.name}}</h1>
+    <p class="lead text-muted">{{ currentRecipe.description }}</p>
+
   </div>
   <div class="row align-items-start" style="margin-top: 20px;">
     <div class="col">
       <div>
-        <img class="rounded img-fluid"
-          src="https://www.forkinthekitchen.com/wp-content/uploads/2018/01/210729.salmon.lemon_.garlic.pasta-1456-7.jpg"
-          alt="example"/>
+        <img :src="imageURL" class="img-fluid" alt="...">
       </div>
     </div>
     <div class="col">
@@ -39,8 +39,12 @@ export default {
   name: 'Recipe',
   data() {
     return {
-      currentRecipe: [name],
-      message: ''
+      currentRecipe: {
+        name: "",
+        description: "",
+        direction: ""
+      },
+      imageURL: undefined
     };
   },
 
@@ -49,7 +53,10 @@ export default {
       PublicContentService.getRecipeById(id)
         .then(response => {
           this.currentRecipe = response.data;
-          console.log(response.data);
+          return this.currentRecipe.image.data
+        })
+        .then(response => {
+          this.imageURL = "data:image/jpg;base64," + response
         })
         .catch(e => {
           console.log(e);
@@ -67,7 +74,6 @@ export default {
     },
   },
   mounted() {
-    this.message = '';
     this.getRecipe(this.$route.params.id);
   }
 }
