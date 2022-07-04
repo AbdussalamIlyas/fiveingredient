@@ -16,10 +16,7 @@
                   <input style="width: 500px" type="text"
                          class="form-control" aria-label="Large"
                          aria-describedby="inputGroup-sizing-sm"
-                         placeholder="type ingredient here" v-model="id"/>
-                  <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button" @click="searchRecipeByIngredients">Search</button>
-                  </div>
+                         placeholder="type ingredient here" v-model="ingredientNameSearchString"/>
                 </div>
               </div>
             </div>
@@ -35,7 +32,7 @@
     <div class="container">
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
 
-        <div class="col-lg-4 d-flex align-items-stretch" v-for="recipe in recipes" :key="recipe.id">
+        <div class="col-lg-4 d-flex align-items-stretch" v-for="recipe in filteredRecipes" :key="recipe.id">
           <div class="card" style="width: 18rem;">
             <img :src="displayImage(recipe.image.data)" class="card-img-top" alt="...">
             <div class="card-body">
@@ -74,6 +71,11 @@ export default {
       },
       currentIndex: -1,
       name: "",
+
+      // Search Bar
+      ingredientNameSearchString:"",
+      ingredientsFromDatabase: []
+
     };
   },
   methods: {
@@ -118,11 +120,44 @@ export default {
 
     displayImage(base64String) {
       return "data:image/jpg;base64," + base64String
-    }
+    },
 
+    getAllIngredients() {
+      PublicContentService.getAllIngredient()
+        .then(response => {
+          this.ingredientsFromDatabase = response.data;
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    },
+
+  },
+  computed: {
+    filteredRecipes: function () {
+
+      let recipes = this.recipes;
+      let searchString = this.ingredientNameSearchString.trim().toLowerCase();
+
+      if(!searchString){
+        return recipes;
+      }
+
+      recipes = recipes.filter(function(recipeItem){
+        for(const ing of recipeItem.ingredients) {
+          if(ing.name.toLowerCase().indexOf(searchString) !== -1){
+            return recipeItem;
+          }
+        }
+
+      })
+
+      return recipes;
+    }
   },
   mounted() {
     this.retrieveRecipes();
+    this.getAllIngredients();
   }
 };
 </script>
