@@ -37,10 +37,6 @@
           <input :disabled="!changeImage" type="file" accept="image/*" ref="file" @change="selectImage"/>
         </label>
 
-        <div>
-          <button v-if="changeImage" @click="uploadImage" class="btn btn-primary btn-sm" type="button">Upload Image</button>
-        </div>
-
       </div>
 
 
@@ -131,7 +127,8 @@ export default {
       oldImage: undefined,
       previewImage: undefined,
       currentImage: undefined,
-      uploadedImageId: ""
+      uploadedImageId: "",
+      progress: 0,
     };
   },
   methods: {
@@ -178,9 +175,7 @@ export default {
       this.currentImage = this.$refs.file.files.item(0);
       this.previewImage = URL.createObjectURL(this.currentImage);
       this.progress = 0;
-    },
 
-    uploadImage() {
       UploadFileService.upload(this.currentImage, (event) => {
         this.progress = Math.round((100 * event.loaded) / event.total);
       })
@@ -188,8 +183,12 @@ export default {
           return response.data.message
         })
         // response.data.message is returning imageId as String in Backend
-        .then((imageId) => {
-          this.uploadedImageId = imageId
+        .then((newImageId) => {
+          EditRecipeService.updateImage(
+            this.currentRecipe.id,
+            newImageId
+          )
+          console.log(newImageId)
         })
         .catch(error => {
           console.log(error);
@@ -206,14 +205,6 @@ export default {
       EditRecipeService.updateRecipe(this.currentRecipe.id, putData)
         .then((response) => {
           console.log(response.data)
-
-          // put image to recipe
-          if(this.changeImage === true) {
-            EditRecipeService.updateImage(
-              this.currentRecipe.id,
-              this.currentRecipe.image.id,
-              this.currentImage)
-          }
 
           // remove ingredients from recipe
           return EditRecipeService.removeIngredients(this.currentRecipe.id)

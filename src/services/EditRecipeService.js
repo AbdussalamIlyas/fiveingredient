@@ -8,17 +8,8 @@ class EditRecipeService {
   }
 
   // Update Image (remove current image and put new one)
-  updateImage(recipeId,oldImageId,newImageId) {
-    //delete current image
-    axios.delete(`/recipes/${recipeId}/images/${oldImageId}`)
-      .then((response) => {
-        console.log(response.data)
-        // update new image
-        return axios.put(`/recipes/${recipeId}/images/${newImageId}`)
-      })
-      .then((response) => {
-        return response.data
-      });
+  updateImage(recipeId,newImageId) {
+    return axios.put(`/recipes/${recipeId}/images/${newImageId}`)
   }
 
   // Update Ingredients (remove current ingredients and put new ingredients)
