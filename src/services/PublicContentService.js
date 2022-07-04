@@ -6,6 +6,10 @@ class PublicContentService {
     return axios.get("/public/recipes");
   }
 
+  getAllIngredient() {
+    return axios.get(`/ingredients`)
+  }
+
   searchRecipeByIngredient(name) {
     return axios.get(`/public/recipes?name=${name}`);
   }
@@ -16,6 +20,10 @@ class PublicContentService {
 
   getRecipeById(id) {
     return axios.get(`/public/recipes/${id}`);
+  }
+
+  getImageById(id) {
+    return axios.get(`/files/${id}`);
   }
 }
 export default new PublicContentService();

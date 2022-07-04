@@ -69,7 +69,7 @@
 
       </div>
     </div>
-    <!-- Row : Ingredient -->
+    <!-- Row : Search Bar Ingredient -->
     <div class="row p-3">
       <h4 class="mt-3">Ingredient</h4>
       <div class="input-group mb-3">
@@ -191,6 +191,7 @@ export default {
         .then((response) => {
           return response.data.message
         })
+        // response.data.message is returning imageId as String in Website-Backend
         .then((imageId) => {
           this.uploadedImageId = imageId
           let data = {
@@ -222,7 +223,7 @@ export default {
         })
         .catch((error) => {
           this.progress = 0;
-          console.log("Could not upload the image! " + error);
+          console.log(error);
           this.currentImage = undefined;
         });
 

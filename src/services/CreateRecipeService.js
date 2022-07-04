@@ -15,12 +15,7 @@ class CreateRecipeService {
   }
 
   setImageForRecipe(recipeId,imageId) {
-    console.log("Second: "+imageId)
     return axios.put(`/recipes/${recipeId}/images/${imageId}`)
-  }
-
-  removeImageForRecipe(recipeId,imageId) {
-    return axios.delete(`/recipes/${recipeId}/images/${imageId}`)
   }
 
 } export default new CreateRecipeService()
