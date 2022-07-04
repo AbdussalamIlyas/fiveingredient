@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from './plugins/font-awesome'
 import authHeader from '@/services/auth-header'
 import axios from 'axios'
 
-axios.defaults.baseURL = 'http://localhost:8080/api'
+axios.defaults.baseURL = 'https://fiveingredient-backend/api'
 axios.defaults.headers.common = authHeader()
 
 createApp(App)
