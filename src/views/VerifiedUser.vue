@@ -6,7 +6,7 @@
         <div class="col-md-6 text-center text-md-start d-flex d-sm-flex d-md-flex justify-content-center align-items-center justify-content-md-start align-items-md-center justify-content-xl-center">
           <div class="card p-sm-5" style="max-width: 350px;">
             <h1 class="font-weight-bold">Verified User</h1>
-            <p class="my-3">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid assumenda fugit mollitia obcaecati omnis quasi quo, voluptatum</p>
+            <p class="my-3">You can change user access here. Only users that has role moderator can create, edit, and delete recipe.</p>
           </div>
         </div>
       </div>

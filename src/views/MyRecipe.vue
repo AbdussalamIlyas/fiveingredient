@@ -3,7 +3,7 @@
     <div class="row py-lg-5">
       <div class="col-lg-6 col-md-8 mx-auto">
         <h1 class="fw-light">My Recipe</h1>
-        <p class="lead text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. A commodi distinctio dolores et excepturi expedita, facilis illo ipsum iure magni mollitia nesciunt omnis quas quos rerum soluta suscipit tenetur vitae.</p>
+        <p class="lead text-muted">Your recipes that you have created.</p>
 
         <p>
           <router-link v-if="showModeratorBoard" to="/mod" class="btn btn-primary my-2">Create Recipe</router-link>

@@ -7,7 +7,7 @@
         <div class="col-md-6 text-center text-md-start d-flex d-sm-flex d-md-flex justify-content-center align-items-center justify-content-md-start align-items-md-center justify-content-xl-center">
           <div class="card p-sm-5" style="max-width: 350px;">
             <h1 class="font-weight-bold">Create Your Own Recipe</h1>
-            <p class="my-3">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid assumenda fugit mollitia obcaecati omnis quasi quo, voluptatum</p>
+            <p class="my-3">Create your recipes and upload them here at "fiveingredients". Help the community to cook / bake on their own.</p>
           </div>
         </div>
       </div>
@@ -16,7 +16,7 @@
   <div class="container mt-5 mb p-4 border">
     <div class="row justify-content-center">
       <div class="col-3 mb-4">
-        <h1 class="fw-light">Creat Recipe</h1>
+        <h1 class="fw-light">Create Recipe</h1>
       </div>
     </div>
     <div class="row">
